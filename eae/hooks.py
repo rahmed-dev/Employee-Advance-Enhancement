@@ -88,7 +88,6 @@ app_license = "mit"
 # Uninstallation
 # ------------
 
-# before_uninstall = "eae.uninstall.before_uninstall"
 # after_uninstall = "eae.uninstall.after_uninstall"
 
 # Integration Setup
@@ -113,77 +112,32 @@ app_license = "mit"
 
 # notification_config = "eae.notifications.get_notification_config"
 
-# Permissions
-# -----------
-# Permissions evaluated in scripted ways
-
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
-#
-# has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
-# }
-
-# DocType Class
-# ---------------
-# Override standard doctype classes
-
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_dashboards = {
+	"Employee Advance": [
+		"eae.employee_advance_enhanced.employee_advance_dashboard.get_data"
+	]
+}
 
 # Document Events
 # ---------------
-# Hook on document methods and events
-
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Employee Advance": {
+		"on_update": "eae.employee_advance_enhanced.employee_advance_events.on_employee_advance_update"
+	}
+}
 
 # Scheduled Tasks
 # ---------------
-
-# scheduler_events = {
-# 	"all": [
-# 		"eae.tasks.all"
-# 	],
-# 	"daily": [
-# 		"eae.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"eae.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"eae.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"eae.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"daily": [
+		"eae.employee_advance_enhanced.repayment_schedule_jobs.process_due_advance_installments"
+	]
+}
 
 # Testing
 # -------
 
 # before_tests = "eae.install.before_tests"
-
-# Overriding Methods
-# ------------------------------
-#
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "eae.event.get_events"
-# }
-#
-# each overriding function accepts a `data` argument;
-# generated from the base implementation of the doctype dashboard,
-# along with any modifications made in other Frappe apps
-# override_doctype_dashboards = {
-# 	"Task": "eae.task.get_dashboard_data"
-# }
 
 # exempt linked doctypes from being automatically cancelled
 #
@@ -193,7 +147,6 @@ app_license = "mit"
 # -----------------------------------------------------------
 
 # ignore_links_on_delete = ["Communication", "ToDo"]
-
 # Request Events
 # ----------------
 # before_request = ["eae.utils.before_request"]
@@ -242,3 +195,20 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+# Doctype JS
+# ----------
+doctype_js = {
+	"Employee Advance": "public/js/employee_advance.js",
+}
+
+# Fixtures
+# --------
+# Export only Custom Fields belonging to this app's module so that
+# our Employee Advance / Salary Component customizations travel with
+# the app without pulling in unrelated fields.
+fixtures = [
+	{
+		"doctype": "Custom Field",
+		"filters": [["module", "=", "Employee Advance Enhanced"]],
+	},
+]
