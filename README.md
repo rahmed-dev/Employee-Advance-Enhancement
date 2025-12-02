@@ -21,7 +21,7 @@ bench install-app eae
 ![Repayment Schedule Preview Dashboard](assets/repayment-dashboard.png)
 
 ### User Guide.
-Please Refer to ![](docs/user_guide.md)
+Please Refer to [User Guide](docs/user_guide.md)
 
 ### License
 
