@@ -11,23 +11,11 @@ cd $PATH_TO_YOUR_BENCH
 bench get-app $URL_OF_THIS_REPO --branch develop
 bench install-app eae
 ```
-
-### Contributing
-
-This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
-
-```bash
-cd apps/eae
-pre-commit install
-```
-
-Pre-commit is configured to use the following tools for checking and formatting your code:
-
-- ruff
-- eslint
-- prettier
-- pyupgrade
-
+### Features
+1. Schedule Autotamtic Employee Advance Repayment Fully Integrated with Frappe HRMS Payroll Module.
+![Pop-up Scheduling Advance Repayment](assets/image.png)
+2. View Pending Instalment in Dashboard.
+![Repayment Schedule Preview Dashboard](assets/image-1.png)
 ### License
 
 mit
