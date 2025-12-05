@@ -89,12 +89,10 @@ jobs:
         env:
           CI: "Yes"
         run: |
-          bench get-app frappe https://github.com/frappe/frappe
           bench get-app hrms https://github.com/frappe/hrms
           bench get-app eae "$GITHUB_WORKSPACE"
           bench setup requirements --dev
           bench new-site --db-root-password root --admin-password admin test_site
-          bench --site test_site install-app frappe
           bench --site test_site install-app hrms
           bench --site test_site install-app eae
           bench build
