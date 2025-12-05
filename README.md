@@ -1,6 +1,6 @@
 ### Employee Advance Enhanced
 
-Enhancement to Frappe HRMS Employee Advance. That makes return on employee advance easier.
+Enhancement to Frappe HRMS Employee Advance. 
 
 ### Installation
 
