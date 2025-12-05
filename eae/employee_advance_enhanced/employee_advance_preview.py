@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Dict, List
 
 import frappe
+from frappe import _
 from frappe.utils import flt
 
 
@@ -17,7 +18,7 @@ def get_repayment_schedule_preview(employee_advance: str) -> Dict:
     - A compact table of installments (date, amount, status, additional salary)
     """
     if not employee_advance:
-        frappe.throw("Employee Advance is required to build the schedule preview.")
+        frappe.throw(_("Employee Advance is required to build the schedule preview."))
 
     advance = frappe.get_doc("Employee Advance", employee_advance)
     remaining_balance = flt(advance.paid_amount) - flt(advance.return_amount)
@@ -152,4 +153,3 @@ def _status_color(status: str) -> str:
     if status in ("closed", "cancelled", "canceled"):
         return "red"
     return "gray"
-

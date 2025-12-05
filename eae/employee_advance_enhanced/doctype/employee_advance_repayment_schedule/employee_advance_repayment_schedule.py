@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 from frappe.utils import add_days, add_months, flt, getdate
 
@@ -63,16 +64,16 @@ def generate_schedule(
 	  - Future Planned rows are replaced with the new pattern.
 	"""
 	if not employee_advance:
-		frappe.throw("Employee Advance is required to generate a schedule.")
+		frappe.throw(_("Employee Advance is required to generate a schedule."))
 
 	if not schedule_type:
-		frappe.throw("Schedule Type is required to generate a schedule.")
+		frappe.throw(_("Schedule Type is required to generate a schedule."))
 
 	if not repayment_frequency:
-		frappe.throw("Repayment Frequency is required to generate a schedule.")
+		frappe.throw(_("Repayment Frequency is required to generate a schedule."))
 
 	if not start_date:
-		frappe.throw("Start Date is required to generate a schedule.")
+		frappe.throw(_("Start Date is required to generate a schedule."))
 
 	is_preview = bool(int(preview)) if preview not in (None, "", 0, "0") else False
 
@@ -87,19 +88,19 @@ def generate_schedule(
 
 	if remain_for_schedule <= 0:
 		frappe.throw(
-			f"Employee Advance {advance.name} has no remaining balance to schedule.",
-			title="No Remaining Balance",
+			_("Employee Advance {0} has no remaining balance to schedule.").format(advance.name),
+			title=_("No Remaining Balance"),
 		)
 
 	if schedule_type == "Fixed Number of Installments":
 		if not number_of_installments:
-			frappe.throw("Number of Installments is required for this schedule type.")
+			frappe.throw(_("Number of Installments is required for this schedule type."))
 		try:
 			number_of_installments = int(number_of_installments)
 		except (TypeError, ValueError):
-			frappe.throw("Number of Installments must be an integer.")
+			frappe.throw(_("Number of Installments must be an integer."))
 		if number_of_installments <= 0:
-			frappe.throw("Number of Installments must be greater than zero.")
+			frappe.throw(_("Number of Installments must be greater than zero."))
 
 		base_amount = remain_for_schedule / number_of_installments
 		installment_amounts = [base_amount] * number_of_installments
@@ -109,14 +110,14 @@ def generate_schedule(
 
 	elif schedule_type == "Fixed Installment Amount":
 		if not installment_amount:
-			frappe.throw("Installment Amount is required for this schedule type.")
+			frappe.throw(_("Installment Amount is required for this schedule type."))
 		try:
 			installment_amount_value = flt(installment_amount)
 		except (TypeError, ValueError):
-			frappe.throw("Installment Amount must be a number.")
+			frappe.throw(_("Installment Amount must be a number."))
 
 		if installment_amount_value <= 0:
-			frappe.throw("Installment Amount must be greater than zero.")
+			frappe.throw(_("Installment Amount must be greater than zero."))
 
 		full_installments = int(remain_for_schedule // installment_amount_value)
 		installment_amounts = [installment_amount_value] * max(full_installments, 0)
@@ -131,7 +132,7 @@ def generate_schedule(
 			installment_amounts = [remain_for_schedule]
 
 	else:
-		frappe.throw(f"Unsupported schedule type: {schedule_type}")
+		frappe.throw(_("Unsupported schedule type: {0}").format(schedule_type))
 
 	start = getdate(start_date)
 	installments = []
@@ -145,7 +146,7 @@ def generate_schedule(
 		elif repayment_frequency in ("Every 3 Months", "Quarterly"):
 			installment_date = add_months(start, index * 3)
 		else:
-			frappe.throw(f"Unsupported repayment frequency: {repayment_frequency}")
+			frappe.throw(_("Unsupported repayment frequency: {0}").format(repayment_frequency))
 
 		installments.append(
 			{
@@ -166,7 +167,7 @@ def generate_schedule(
 		}
 
 	if not repayment_salary_component:
-		frappe.throw("Repayment Salary Component is required to create a schedule.")
+		frappe.throw(_("Repayment Salary Component is required to create a schedule."))
 
 	component_type, is_repayment_component = frappe.db.get_value(
 		"Salary Component",
@@ -175,8 +176,10 @@ def generate_schedule(
 	)
 	if component_type != "Deduction" or not is_repayment_component:
 		frappe.throw(
-			"Repayment Salary Component must be a Deduction component with "
-			'"Is Employee Advance Repayment Component" enabled.'
+			_(
+				'Repayment Salary Component must be a Deduction component with '
+				'"Is Employee Advance Repayment Component" enabled.'
+			)
 		)
 
 	existing_schedules = frappe.db.get_all(
@@ -187,8 +190,10 @@ def generate_schedule(
 
 	if len(existing_schedules) > 1:
 		frappe.throw(
-			"Multiple Employee Advance Repayment Schedules exist for this Employee Advance. "
-			"Please keep only one schedule record."
+			_(
+				"Multiple Employee Advance Repayment Schedules exist for this Employee Advance. "
+				"Please keep only one schedule record."
+			)
 		)
 
 	schedule_name = existing_schedules[0] if existing_schedules else None
